@@ -5,7 +5,7 @@ import AuthLayout from "./_auth/AuthLayout"
 import RootLayout from "./root/RootLayout"
 import { Home } from "./root/pages"
 import "./global.css"
-
+import { Toaster } from "@/components/ui/toaster"
 
 const App = () => {
   return (
@@ -21,9 +21,9 @@ const App = () => {
             {/* private routes */}
             <Route element={<RootLayout />}>
               <Route index element={<Home />}/>
-            </Route>
-            
+            </Route>    
         </Routes>
+        <Toaster />
     </main>
   )
 }
