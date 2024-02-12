@@ -20,12 +20,13 @@ import { useUserContext } from "@/context/AuthContext";
 
 const SignUpForm = () => {
   const { toast } = useToast();
+ 
   const {checkAuthUser, isLoading: isUserLoading} = useUserContext()
   const navigate = useNavigate()
 
 
-  const {mutateAsync:createUserAccount, isLoading: isCreatingUser} = useCreateUserAccountMutation();
-  const {mutateAsync: signInAccount, isLoading: isSigninIn} = useSignInAccount();
+  const {mutateAsync:createUserAccount, isPending: isCreatingUser} = useCreateUserAccountMutation();
+  const {mutateAsync: signInAccount, isPending: isSigninIn} = useSignInAccount();
 
 
   // 1. Define your form.
@@ -43,8 +44,7 @@ const SignUpForm = () => {
   async function onSubmit(values: z.infer<typeof signupSchema>) {
     const newUser = await createUserAccount(values)
     if(!newUser){
-      return;
-      toast({
+      return toast({
         title: "Sign up failed. Please try again "
       })
     }
@@ -144,7 +144,7 @@ const SignUpForm = () => {
 
           <p className="text-small-regular text-light-2 text-center">
             Already have an account? 
-            <Link to="/signin" className="text-primary-500 ml-1 text-small-semibold">Signin</Link>
+            <Link to="/sign-in" className="text-primary-500 ml-1 text-small-semibold">Signin</Link>
           </p>
         </form>
       </div>
@@ -153,3 +153,5 @@ const SignUpForm = () => {
 };
 
 export default SignUpForm;
+
+

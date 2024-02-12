@@ -15,7 +15,7 @@ export async function createUserAccount(user: INewUser){
         if(!newAccount) throw Error;
         const avatarUrl = avatar.getInitials(user.name)
         const newUser = await saveUserToDB({
-            accountId: newAccount.$id,
+            accountid: newAccount.$id,
             name: newAccount.name,
             email: newAccount.email,
             username: user.username,
@@ -28,8 +28,9 @@ export async function createUserAccount(user: INewUser){
     }
 }
 
+//SAVING USER TO DATABASE
 export async function saveUserToDB(user: {
-    accountId:string;
+    accountid:string;
     name:string;
     email: string;
     username: string;
@@ -43,12 +44,14 @@ export async function saveUserToDB(user: {
         user
     )
     return newUser
+    console.log(newUser);
    } catch (error) {
     console.log(error);
     return error
    } 
 }
 
+//SIGNING IN
 export async function SignInAccount(user: { 
     email: string;
     password: string
@@ -62,19 +65,20 @@ export async function SignInAccount(user: {
     }
 }   
 
+//GET  THE CURRENT USER
 export async function getCurrentUser(){
     try {
         const currentAccount = await account.get()
-        if (!currentAccount)  throw Error;
+        if (!currentAccount)  throw Error("Current account not found");
 
         const currentUser = await database.listDocuments(
             appwriteConfig.databaseid,
             appwriteConfig.userCollectionId,
-            [Query.equal('accountId', currentAccount.$id)]
+            [Query.equal('accountid', currentAccount.$id)]
         )
-        if(!currentUser) throw Error;
+        if(!currentUser) throw Error("Current user not found");
         return currentUser.documents[0];
     } catch (error) {
-        console.log(error)
+        console.log("error fetching current user: ", error)
     }
 }

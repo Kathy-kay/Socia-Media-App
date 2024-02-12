@@ -12,7 +12,7 @@ export const INITIAL_USER ={
     imageUrl: ""
 }
 
-//to check if a user is logged in 
+//to check if a user is logged in typr
  const  INITIAL_STATE = {
     user: INITIAL_USER,
     isLoading: false,
@@ -70,6 +70,8 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
         setIsAuthenticated,
         checkAuthUser
     }
+
+
   return (
     <AuthContext.Provider value={value}>
         {children}

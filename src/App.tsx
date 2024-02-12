@@ -13,7 +13,7 @@ const App = () => {
         <Routes>
             {/* public Route */}
             <Route element={<AuthLayout />}>
-              <Route path="/signin" element={<SignInForm />}/>
+              <Route path="/sign-in" element={<SignInForm />}/>
               <Route path="/signup" element={<SignUpForm />}/>
             </Route>
             
