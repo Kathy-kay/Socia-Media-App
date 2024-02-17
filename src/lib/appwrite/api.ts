@@ -3,8 +3,9 @@ import { INewPost, INewUser } from "../types";
 import { account, appwriteConfig, avatar, database, storage } from "./config";
 import { URL } from "url";
 
-// interface UploadedFile  {
-//   $id: string
+// interface UploadedFile {
+//     $id: string;
+   
 // }
 
 export async function createUserAccount(user: INewUser) {
@@ -97,16 +98,16 @@ export async function createPost(post: INewPost){
   try {
     //upload storage
     const uploadedFile = await uploadFile(post.file[0]);
-    if(!uploadedFile) throw Error
+    if(!uploadedFile) throw new Error("Failed to upload file");
 
     //Get fileurl
     const fileurl = await getFilePreview(uploadedFile.$id)
 
     if(!fileurl){
       await deleteFile(uploadedFile.$id)
-      throw Error
+      throw new Error("Failed to get file URL");
     }
-     // Convert tags into array
+     // Convert tags into array  
      const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
      // Create post
@@ -146,13 +147,13 @@ export async function uploadFile(file: File){
     return uploadedFile;
    } catch (error) {
     console.log(error);
-    return error
+    throw Error
    }
 }
 
 export async function getFilePreview(fileId: string){
   try {
-    const fileurl =  storage.getFilePreview(
+    const fileurl =  await storage.getFilePreview(
       appwriteConfig.storageId,
       fileId,
       2000,
