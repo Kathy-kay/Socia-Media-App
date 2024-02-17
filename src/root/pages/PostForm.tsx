@@ -15,21 +15,22 @@ import { Textarea } from "@/components/ui/textarea";
 import FileUploader from "@/components/shared/FileUploader";
 import { postFormSchema } from "@/lib/validation";
 import { Models } from "appwrite";
-// import { useCreatePost } from "@/lib/react-query/queryAndMutation";
-// import { useUserContext } from "@/context/AuthContext";
-// import { useToast } from "@/components/ui/use-toast";
-// import { useNavigate } from "react-router-dom";
+import { useUserContext } from "@/context/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import { useCreatePost } from "@/lib/react-query/queryAndMutation";
+
 
 type postFormsProps = {
   post?: Models.Document;
 };
 
 const PostForm = ({ post }: postFormsProps) => {
-  // const { mutateAsync: createPost, isPending: isCreatingPost } =
-  //   useCreatePost();
-  // const { user } = useUserContext();
-  // const { toast } = useToast();
-  // const navigate = useNavigate();
+  const { mutateAsync: createPost, isPending: isCreatingPost } =
+    useCreatePost();
+  const { user } = useUserContext();
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof postFormSchema>>({
     resolver: zodResolver(postFormSchema),
@@ -44,15 +45,16 @@ const PostForm = ({ post }: postFormsProps) => {
   async function onSubmit(values: z.infer<typeof postFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    // const newPost = await createPost({
-    //   ...values,
-    //   userId:user.id
-    // });
+    const newPost = await createPost({
+      ...values,
+      userId:user.id
+    });
 
-    // if(!newPost){
-    //   toast({title: "Please try again"})
-    // }
-    console.log(values)
+    if(!newPost){
+      toast({title: "Please try again"})
+    }
+    // console.log(values)
+    navigate('/')
   }
   return (
     <Form {...form}>

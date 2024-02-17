@@ -55,15 +55,21 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
     }
     
     useEffect(() => {
-        const isSignedIn = localStorage.getItem("cookieFallback") === "[]" || 
-                           localStorage.getItem("cookieFallback") === null;
 
-        // Check if the user is not authenticated and trying to access sign-up page
-        const isSignUpPage = window.location.pathname === "/sign-up";
-        console.log(isSignUpPage, isSignedIn)
-        if (!isSignedIn && !isSignUpPage) {
-            navigate("/sign-in");
-        }
+        if(
+            localStorage.getItem("cookieFallback") === "[]" || 
+            localStorage.getItem("cookieFallback") === null
+        ) navigate("/sign-in")
+        checkAuthUser();
+        // const isSignedIn = localStorage.getItem("cookieFallback") === "[]" || 
+        //                    localStorage.getItem("cookieFallback") === null;
+
+        // // Check if the user is not authenticated and trying to access sign-up page
+        // const isSignUpPage = window.location.pathname === "/sign-up";
+        // console.log(isSignUpPage, isSignedIn)
+        // if (!isSignedIn && !isSignUpPage) {
+        //     navigate("/sign-in");
+        // }
 
         checkAuthUser();
     }, []);
