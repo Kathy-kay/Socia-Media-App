@@ -4,8 +4,9 @@ import {
    useQueryClient,
    useInfiniteQuery
 } from "@tanstack/react-query"
-import { INewUser } from "../types"
-import { SignInAccount, signOutAccount, createUserAccount } from "../appwrite/api"
+
+import { SignInAccount, signOutAccount, createUserAccount} from "../appwrite/api"
+import {  INewUser } from "../types"
 
 export const useCreateUserAccountMutation = () =>{
     return (
@@ -33,3 +34,10 @@ export const useSignOutAccount = () =>{
         })
     )
 }
+// export const useCreatePost = () =>{
+//     return(
+//         useMutation({
+//             mutationFn:(post: INewPost) => createPost(post)
+//         })
+//     )
+// }
