@@ -99,7 +99,7 @@ export async function createPost(post: INewPost){
     //upload storage
     const uploadedFile = await uploadFile(post.file[0]);
     if(!uploadedFile) throw new Error("Failed to upload file");
-
+    console.log(uploadedFile.$id)
     //Get fileurl
     const fileurl = await getFilePreview(uploadedFile.$id)
 
@@ -119,7 +119,7 @@ export async function createPost(post: INewPost){
          creator: post.userId,
          caption: post.caption, 
          imageUrl: fileurl,
-         imageId: uploadedFile.$id,
+         imageid: uploadedFile.$id,
          location: post.location,
          tags: tags,
        }
@@ -151,9 +151,9 @@ export async function uploadFile(file: File){
    }
 }
 
-export async function getFilePreview(fileId: string){
+export  function getFilePreview(fileId: string){
   try {
-    const fileurl =  await storage.getFilePreview(
+    const fileurl =   storage.getFilePreview(
       appwriteConfig.storageId,
       fileId,
       2000,
@@ -180,11 +180,11 @@ export async function deleteFile(fileId: string){
 
 export async function getRecentPost() {
   const posts = await database.listDocuments(
-    appwriteConfig.postCollectionId,
     appwriteConfig.databaseId,
+    appwriteConfig.postCollectionId,
     [Query.orderDesc(`$createdAt`), Query.limit(20)]
   )
-  if(!posts) throw Error
+  if(!posts) throw new Error ("Get post failed")
 
   return posts;
 }
