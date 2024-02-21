@@ -23,9 +23,10 @@ import { useCreatePost } from "@/lib/react-query/queryAndMutation";
 
 type postFormsProps = {
   post?: Models.Document;
+  action: "Create" | "Update"
 };
 
-const PostForm = ({ post }: postFormsProps) => {
+const PostForm = ({ post, action}: postFormsProps) => {
   const { mutateAsync: createPost, isPending: isCreatingPost } =
     useCreatePost();
   const { user } = useUserContext();
