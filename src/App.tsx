@@ -3,7 +3,7 @@ import SignInForm from "./_auth/forms/SignInForm"
 import SignUpForm from "./_auth/forms/SignUpForm"
 import AuthLayout from "./_auth/AuthLayout"
 import RootLayout from "./root/RootLayout"
-import { AllUsers, Bookmark, CreatePost, Explore, Home, LikedPost, PostDetails, Profile, UpdatePost, UpdateProfile } from "./root/pages"
+import { AllUsers, Bookmark, CreatePost, EditPost, Explore, Home, LikedPost, PostDetails, Profile, UpdateProfile } from "./root/pages"
 import "./global.css"
 import { Toaster } from "@/components/ui/toaster"
 
@@ -26,7 +26,7 @@ const App = () => {
               <Route path="/bookmark" element={<Bookmark />}/>
               <Route path="/all-users" element={<AllUsers />}/>
               <Route path="/create-post" element={<CreatePost />}/>
-              <Route path="/update-post/:id" element={<UpdatePost />}/>
+              <Route path="/edit-post/:id" element={<EditPost />}/>
               <Route path="/post/:id" element={<PostDetails />}/>
               <Route path="/profile/:id/*" element={<Profile />}/>
               <Route path="/update-profile/:id" element={<UpdateProfile />}/>

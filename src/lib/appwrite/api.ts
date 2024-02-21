@@ -48,7 +48,7 @@ export async function saveUserToDB(user: {
       ID.unique(),
       user
     );
-    console.log(newUser);
+    
     return newUser;
     
   } catch (error) {
@@ -61,7 +61,7 @@ export async function saveUserToDB(user: {
 export async function SignInAccount(user: { email: string; password: string }) {
   try {
     const session = await account.createEmailSession(user.email, user.password);
-    console.log(session  )
+    
     return session;
   } catch (error) {
     console.log(error);
