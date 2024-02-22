@@ -81,7 +81,7 @@ export async function getCurrentUser() {
       [Query.equal("accountid", currentAccount.$id)]
     );
     if (!currentUser) throw Error("Current user not found");
-    console.log(currentUser)
+    
     return currentUser.documents[0];
   } catch (error) {
     console.log("error fetching current user: ", error);
@@ -112,8 +112,9 @@ export async function createPost(post: INewPost){
       throw new Error("Failed to get file URL");
     }
      // Convert tags into array  
-     const tags = post.tags?.replace(/ /g, "").split(",") || [];
-
+     // Prepend # symbol to each tag using map
+    const processedTags = post.tags?.replace(/ /g, "").split(",") || []; // Ensure array structure
+    const tagsWithHash = processedTags.map((tag) => `#${tag}`); // Add # symbol with template literal
      // Create post
      const newPost = await database.createDocument(
        appwriteConfig.databaseId,
@@ -125,7 +126,7 @@ export async function createPost(post: INewPost){
          imageUrl: fileurl,
          imageid: uploadedFile.$id,
          location: post.location,
-         tags: tags,
+         tags: tagsWithHash
        }
      );
  
@@ -287,6 +288,9 @@ export async function updatePost(post: IUpdatePost){
     // Convert tags into array  
    
     const tags = post.tags?.replace(/ /g, "").split(",") || [];
+
+    // Add # symbol to each tag element using map
+    const processedTags = tags.map((tag) => `#${tag}`);
      
     const updatePost = await database.updateDocument(
       appwriteConfig.databaseId,
@@ -297,15 +301,17 @@ export async function updatePost(post: IUpdatePost){
         imageUrl: image.imageUrl,
         imageid: image.imageId,
         location: post.location,
-        tags: post.tags
+        tags:processedTags
       }
     )
     if(!updatePost){
       await deleteFile(post.imageId)
       throw Error
     }
+    return updatePost
   } catch (error) {
     console.log(error)
+    
   }
 }
 

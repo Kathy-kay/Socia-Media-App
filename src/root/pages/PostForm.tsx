@@ -18,7 +18,7 @@ import { Models } from "appwrite";
 import { useUserContext } from "@/context/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useCreatePost } from "@/lib/react-query/queryAndMutation";
+import { useCreatePost, useUpdatePost } from "@/lib/react-query/queryAndMutation";
 
 
 type postFormsProps = {
@@ -27,8 +27,9 @@ type postFormsProps = {
 };
 
 const PostForm = ({ post, action}: postFormsProps) => {
-  const { mutateAsync: createPost, isPending: isCreatingPost } =
-    useCreatePost();
+  const { mutateAsync: createPost, isPending: isCreatingPost } = useCreatePost();
+  const { mutateAsync: updatePost, isPending: isLoadingUpdate } = useUpdatePost();
+
   const { user } = useUserContext();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -44,6 +45,23 @@ const PostForm = ({ post, action}: postFormsProps) => {
   });
 
   async function onSubmit(values: z.infer<typeof postFormSchema>) {
+    if(post && action === "Update"){
+      const updatedPost = await updatePost({
+        ...values,
+        postId: post.$id,
+        imageId: post.imageId,
+        imageUrl: post.imageUrl 
+      })
+      if (!updatedPost) {
+        toast({title: "Unable to update post, Please try again"})
+      }else{
+        toast({title: "Successfully update post"})
+      }
+      console.log(updatedPost)
+      return navigate('/')
+    }
+   
+
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     const newPost = await createPost({
@@ -141,8 +159,10 @@ const PostForm = ({ post, action}: postFormsProps) => {
           <Button
             type="submit"
             className="shad-button_primary whitespace-nowrap"
+            disabled={isCreatingPost || isLoadingUpdate }
           >
-            Submit
+          {isCreatingPost || isLoadingUpdate && "Loading..."}
+          {action} Post
           </Button>
         </div>
       </form>
