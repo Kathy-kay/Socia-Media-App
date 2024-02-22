@@ -10,12 +10,12 @@ import React,{ useEffect, useState } from "react";
 import Loader from "./Loader";
 
 type PostStatProps = {
-  post: Models.Document;
+  post?: Models.Document;
   userId: string;
 };
 
 const PostStats = ({ post, userId }: PostStatProps) => {
-  const likeList = post.likes.map((user: Models.Document) => user.$id);
+  const likeList = post?.likes.map((user: Models.Document) => user.$id);
 
   const [ likes, setLikes ] = useState(likeList);
   const [ isSave, setIsSave ] = useState(false);
@@ -39,9 +39,9 @@ const PostStats = ({ post, userId }: PostStatProps) => {
       newLikes.push(userId)
     }
     setLikes(newLikes);
-    likePost({postId: post.$id, likesArray: newLikes})
+    likePost({postId: post?.$id || "", likesArray: newLikes})
   }
-  const savedPostRecord = currentUser?.save.find((record: Models.Document) => record.post.$id === post.$id);
+  const savedPostRecord = currentUser?.save.find((record: Models.Document) => record.post.$id === post?.$id);
   useEffect(() =>{
     setIsSave(savedPostRecord ? true : false)
   },[currentUser])
@@ -54,7 +54,7 @@ const PostStats = ({ post, userId }: PostStatProps) => {
       deleteSavedPost(savedPostRecord.$id);
       return
     }
-    savePost({postId: post.$id, userId})
+    savePost({postId: post?.$id || "", userId})
   }
 
   return (

@@ -114,7 +114,10 @@ export async function createPost(post: INewPost){
      // Convert tags into array  
      // Prepend # symbol to each tag using map
     const processedTags = post.tags?.replace(/ /g, "").split(",") || []; // Ensure array structure
-    const tagsWithHash = processedTags.map((tag) => `#${tag}`); // Add # symbol with template literal
+    const tagsWithHash = processedTags.map((tag) => {
+      const trimmedTag = tag.replace(/^(#)+/, '#'); // Replace leading # symbols with one #
+      return trimmedTag;
+    });
      // Create post
      const newPost = await database.createDocument(
        appwriteConfig.databaseId,
@@ -253,7 +256,7 @@ export async function getPostById(postId: string) {
       appwriteConfig.postCollectionId,
       postId
     )
-    return getPost;
+    return getPost || {};
   } catch (error) {
     console.log(error)
     
@@ -290,7 +293,10 @@ export async function updatePost(post: IUpdatePost){
     const tags = post.tags?.replace(/ /g, "").split(",") || [];
 
     // Add # symbol to each tag element using map
-    const processedTags = tags.map((tag) => `#${tag}`);
+    const processedTags = tags.map((tag) => {
+      const trimmedTag = tag.replace(/^(#)+/, '#'); // Replace leading # symbols with one #
+      return trimmedTag;
+    });
      
     const updatePost = await database.updateDocument(
       appwriteConfig.databaseId,
