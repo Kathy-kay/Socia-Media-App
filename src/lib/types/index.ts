@@ -55,12 +55,3 @@ export type INavLink = {
     username: string;
     password: string;
   };
-
-  export type IUpdatePostResponse = {
-    $id: string;
-    caption: string;
-    imageUrl: string;
-    imageId: string;
-    location?: string; // Optional property
-    tags: string[];
-  }
