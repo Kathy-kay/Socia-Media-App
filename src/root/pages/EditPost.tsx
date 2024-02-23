@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import PostForm from "./PostForm"
+import PostForm from "../../components/shared/PostForm"
 import { useGetPostById } from "@/lib/react-query/queryAndMutation"
 import Loader from "@/components/shared/Loader"
 

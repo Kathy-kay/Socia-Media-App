@@ -70,7 +70,7 @@ const SignUpForm = () => {
     else{
       return toast({title: "Sign in failed .please try again " })
     }
-    console.log(newUser);
+   
   }
   return (
     <Form {...form}>

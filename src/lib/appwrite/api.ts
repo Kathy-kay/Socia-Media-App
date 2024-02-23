@@ -18,7 +18,7 @@ export async function createUserAccount(user: INewUser) {
       user.name
     );
     if (!newAccount) throw Error;
-    const avatarUrl = avatar.getInitials(user.name);
+    const avatarUrl = avatar.getInitials(user.name);  
     const newUser = await saveUserToDB({
       accountid: newAccount.$id,
       name: newAccount.name,

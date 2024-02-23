@@ -58,7 +58,7 @@ const PostForm = ({ post, action}: postFormsProps) => {
         toast({title: "Successfully update post"})
       }
       // console.log(updatedPost)
-      return navigate(`/post/${post.$id}`)
+      return navigate('/')
     }
    
 
