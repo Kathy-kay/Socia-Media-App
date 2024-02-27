@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 
 import {
@@ -15,9 +16,11 @@ import {
   deletePost,
   getInfinitePosts,
   searchPostS,
+  getSavePost,
 } from "../appwrite/api";
 import { INewPost, INewUser, IUpdatePost } from "../types";
 import { QUERY_KEYS } from "./queryKeys";
+
 
 export const useCreateUserAccountMutation = () => {
   return useMutation({
@@ -158,16 +161,20 @@ export const useDeletePost = () =>{
   })
 }
 
-export const useGetInfinitePost = () =>{
+export const useGetPost = () =>{
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePosts,
-    getNextPageParam: (lastPage) =>{
-      if(lastPage && lastPage.documents.length === 0) return null;
-      const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
-      return lastId
-    }
-  })
+    queryFn: getInfinitePosts as any,
+    getNextPageParam: (lastPage: any) => {
+      if (!lastPage || lastPage.documents.length === 0) {
+        return null;
+      }
+  
+      const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+      return lastId;
+    },
+    initialPageParam: null, // Set initialPageParam to null
+  });
 }
 
 export const useSearchPosts = (searchTerm: string) =>{
@@ -177,3 +184,12 @@ export const useSearchPosts = (searchTerm: string) =>{
     enabled: !!searchTerm
   })
 }
+
+export const useGetSavedPosts = (userId: string) =>{
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_SAVED_POSTS, userId],
+    queryFn: () => getSavePost(userId),
+    enabled: !!userId, // Only enable query if userId exists
+  })
+}
+

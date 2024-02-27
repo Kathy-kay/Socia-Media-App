@@ -369,3 +369,19 @@ export async function searchPostS(searchTerm: string) {
   }
 }
 
+export async function getSavePost(userId: string){
+  try {
+    const savedPost = await database.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      [
+        Query.equal('userId', userId),
+        Query.orderDesc('$createdAt')
+      ]
+    )
+    return savedPost
+  } catch (error) {
+    console.log(error)
+  }
+}
+

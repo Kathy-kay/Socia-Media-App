@@ -4,14 +4,14 @@ import SearchResult from "@/components/shared/SearchResult";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/useDebounce";
 import {
-  useGetInfinitePost,
+  useGetPost,
   useSearchPosts,
 } from "@/lib/react-query/queryAndMutation";
 import { useEffect, useState } from "react";
 import { useInView } from 'react-intersection-observer';
 
 const Explore = () => {
-  const { data: posts, fetchNextPage, hasNextPage } = useGetInfinitePost();
+  const { data: posts, fetchNextPage, hasNextPage } = useGetPost();
   const {ref, inView} = useInView()
 
   const [searchValue, setSearchValue] = useState("");
