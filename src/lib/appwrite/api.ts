@@ -369,19 +369,36 @@ export async function searchPostS(searchTerm: string) {
   }
 }
 
-export async function getSavePost(userId: string){
+export async function getSavePost(userId?: string){
+  if (!userId) return;
   try {
     const savedPost = await database.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.savesCollectionId,
       [
-        Query.equal('userId', userId),
+        Query.equal('user', userId),
         Query.orderDesc('$createdAt')
       ]
     )
+    if (!savedPost) throw Error;
     return savedPost
   } catch (error) {
-    console.log(error)
+    console.error('Error fetching saved posts:', error);
+      throw new Error('Failed to fetch saved posts');
+  }
+}
+
+export async function getUserById(userId: string){
+  try {
+    const user = await database.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    )
+    if(!user) throw new Error("User cannot be found")
+    return user
+  } catch (error) {
+    console.log(error);
   }
 }
 

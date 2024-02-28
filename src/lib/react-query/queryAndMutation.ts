@@ -17,6 +17,7 @@ import {
   getInfinitePosts,
   searchPostS,
   getSavePost,
+  getUserById,
 } from "../appwrite/api";
 import { INewPost, INewUser, IUpdatePost } from "../types";
 import { QUERY_KEYS } from "./queryKeys";
@@ -185,7 +186,7 @@ export const useSearchPosts = (searchTerm: string) =>{
   })
 }
 
-export const useGetSavedPosts = (userId: string) =>{
+export const useGetSavedPosts = (userId?: string) =>{
   return useQuery({
     queryKey: [QUERY_KEYS.GET_SAVED_POSTS, userId],
     queryFn: () => getSavePost(userId),
@@ -193,3 +194,10 @@ export const useGetSavedPosts = (userId: string) =>{
   })
 }
 
+export const useGetUserId = (userId: string) =>{
+  return useQuery ({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn: () => getUserById(userId),
+    enabled: !!userId
+  })
+}
