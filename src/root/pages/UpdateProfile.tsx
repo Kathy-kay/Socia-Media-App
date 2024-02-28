@@ -63,7 +63,10 @@ const UpdateProfile = () => {
                 <FormItem>
                   <FormLabel className="shad-form_label">Bio</FormLabel>
                   <FormControl>
-                    <ProfileUploader  {...field}/>
+                    <ProfileUploader  
+                    fieldChange={field.onChange}
+                    mediaUrl={post?.imageUrl}
+                    {...field}/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
