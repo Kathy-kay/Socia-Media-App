@@ -3,7 +3,14 @@ import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserId } from "@/lib/react-query/queryAndMutation";
-import { Link, Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import LikedPost from "./LikedPost";
 
 interface StabBlockProps {
@@ -22,7 +29,7 @@ const Profile = () => {
   const { user } = useUserContext();
   const { id } = useParams();
   const { data: userData } = useGetUserId(id || "");
-  const {pathname} = useLocation()
+  const { pathname } = useLocation();
 
   if (!userData) {
     return (
@@ -32,7 +39,7 @@ const Profile = () => {
     );
   }
 
-  // console.log(userData)
+ 
 
   return (
     <div className="profile-container">
@@ -90,28 +97,29 @@ const Profile = () => {
           </div>
         </div>
       </div>
-       
-     
-        <div className="flex max-w-5xl w-full">
-          <Link
-            to={`/profile/${id}`}
-            className={`profile-tab rounded-l-lg ${
-              pathname === `/profile/${id}` && "!bg-dark-3"
-            }`}>
-            <img
-              src={"/assets/icons/posts.svg"}
-              alt="posts"
-              width={20}
-              height={20}
-            />
-            Posts
-          </Link>
-          {userData.$id === user.id && (
+
+      <div className="flex max-w-5xl w-full">
+        <Link
+          to={`/profile/${id}`}
+          className={`profile-tab rounded-l-lg ${
+            pathname === `/profile/${id}` && "!bg-dark-3"
+          }`}
+        >
+          <img
+            src={"/assets/icons/posts.svg"}
+            alt="posts"
+            width={20}
+            height={20}
+          />
+          Posts
+        </Link>
+        {userData.$id === user.id && (
           <Link
             to={`/profile/${id}/liked-posts`}
             className={`profile-tab rounded-r-lg ${
               pathname === `/profile/${id}/liked-posts` && "!bg-dark-3"
-            }`}>
+            }`}
+          >
             <img
               src={"/assets/icons/like.svg"}
               alt="like"
@@ -120,9 +128,9 @@ const Profile = () => {
             />
             Liked Posts
           </Link>
-           )}
-        </div>
-     
+        )}
+      </div>
+
       <Routes>
         <Route
           index
