@@ -15,10 +15,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserContext } from "@/context/AuthContext";
 import ProfileUploader from "@/components/shared/ProfileUploader";
+import { useGetUserId, useUpdateUser } from "@/lib/react-query/queryAndMutation";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
+import Loader from "@/components/shared/Loader";
 
 const UpdateProfile = () => {
 
   const {user, setUser} = useUserContext();
+  const { id } = useParams()
+  const {data: currentUser} = useGetUserId(id || "")
+  const {mutateAsync: updateUser, isPending:isUpdatingUser} = useUpdateUser();
+  const navigate = useNavigate()
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof ProfileSchema>>({
@@ -33,10 +41,31 @@ const UpdateProfile = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof ProfileSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const handleUpdate = async (value: z.infer<typeof ProfileSchema>) =>{
+    const updatedUser = await updateUser({
+      userId:  currentUser?.$id ?? "",
+      name: value.name,
+      bio: value.bio,
+      file: value.file,
+      imageId: currentUser?.imageId,
+      imageUrl: currentUser?.imageUrl
+
+    })
+    if(!updatedUser){
+      toast({title: "Update user failed please, try again."})
+    }
+    else{
+      toast({title: "User updated successfully"})
+    }
+
+    setUser({
+      ...user,
+      name: updatedUser?.name,
+      bio: updatedUser?.bio,
+      imageUrl: updatedUser?.imageUrl
+    });
+
+    navigate(`/profile/${id}`)
   }
 
   return (
@@ -54,7 +83,7 @@ const UpdateProfile = () => {
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} 
+          <form onSubmit={form.handleSubmit(handleUpdate)} 
           className="flex flex-col gap-7 w-full mt-4 max-w-5xl">
             <FormField
               control={form.control}
@@ -65,7 +94,7 @@ const UpdateProfile = () => {
                   <FormControl>
                     <ProfileUploader  
                     fieldChange={field.onChange}
-                    mediaUrl={post?.imageUrl}
+                    mediaUrl={currentUser?.imageUrl}
                     {...field}/>
                   </FormControl>
                   <FormMessage />
@@ -140,13 +169,15 @@ const UpdateProfile = () => {
             <div className="flex gap-4 items-center justify-end">
               <Button
                 type="button"
-                className="shad-button_dark_4">
+                className="shad-button_dark_4"
+                onClick={() => navigate(-1)}>
                 Cancel
               </Button>
               <Button
                 type="submit"
-                className="shad-button_primary whitespace-nowrap">
-               
+                className="shad-button_primary whitespace-nowrap"
+                disabled={isUpdatingUser}>
+                {isUpdatingUser && <Loader />}
                 Update Profile
               </Button>
             </div>
