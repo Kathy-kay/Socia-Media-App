@@ -185,6 +185,7 @@ export async function deleteFile(fileId: string) {
 }
 
 export async function getRecentPost() {
+  await new Promise((resolve) => setTimeout(resolve, 15000));
   const posts = await database.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.postCollectionId,
@@ -365,21 +366,21 @@ export async function searchPostS(searchTerm: string) {
   }
 }
 
-export async function getSavePost(userId?: string) {
-  if (!userId) return;
-  try {
-    const savedPost = await database.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.savesCollectionId,
-      [Query.equal("user", userId), Query.orderDesc("$createdAt")]
-    );
-    if (!savedPost) throw Error;
-    return savedPost;
-  } catch (error) {
-    console.error("Error fetching saved posts:", error);
-    throw new Error("Failed to fetch saved posts");
-  }
-}
+// export async function getSavePost(userId?: string) {
+//   if (!userId) return;
+//   try {
+//     const savedPost = await database.listDocuments(
+//       appwriteConfig.databaseId,
+//       appwriteConfig.savesCollectionId,
+//       [Query.equal("user", userId), Query.orderDesc("$createdAt")]
+//     );
+//     if (!savedPost) throw Error;
+//     return savedPost;
+//   } catch (error) {
+//     console.error("Error fetching saved posts:", error);
+//     throw new Error("Failed to fetch saved posts");
+//   }
+// }
 
 export async function getUserById(userId: string) {
   try {

@@ -16,7 +16,7 @@ import {
   deletePost,
   getInfinitePosts,
   searchPostS,
-  getSavePost,
+
   getUserById,
   updateUser,
 } from "../appwrite/api";
@@ -187,13 +187,13 @@ export const useSearchPosts = (searchTerm: string) =>{
   })
 }
 
-export const useGetSavedPosts = (userId?: string) =>{
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_SAVED_POSTS, userId],
-    queryFn: () => getSavePost(userId),
-    enabled: !!userId, // Only enable query if userId exists
-  })
-}
+// export const useGetSavedPosts = (userId?: string) =>{
+//   return useQuery({
+//     queryKey: [QUERY_KEYS.GET_SAVED_POSTS, userId],
+//     queryFn: () => getSavePost(userId),
+//     enabled: !!userId, // Only enable query if userId exists
+//   })
+// }
 
 export const useGetUserId = (userId: string) =>{
   return useQuery ({
